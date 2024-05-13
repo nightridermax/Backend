@@ -1,0 +1,18 @@
+{
+  "name": "backendp",
+  "version": "1.0.0",
+  "description": "Backend Mega Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "backend"
+  ],
+  "author": "Suresh Choudhary",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
