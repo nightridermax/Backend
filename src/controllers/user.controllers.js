@@ -84,6 +84,10 @@ const registerUser = asyncHandler( async (req, res) =>{
     
 } )
 
+const options = {
+    httpOnly: true,
+    secure: true
+}
 
 const loginUser = asyncHandler( async (req, res) =>{
     // req body -> data
@@ -114,10 +118,6 @@ const loginUser = asyncHandler( async (req, res) =>{
 
     //send with cookies
 
-    const options = {
-        httpOnly: true,
-        secure: true
-    }
 
     return res
     .status(200)
@@ -150,10 +150,6 @@ const logoutUser = asyncHandler(async(req, res)=>{
         }
     )
 
-    const options = {
-        httpOnly: true,
-        secure: true
-    }
 
     res
     .status(201)
@@ -163,8 +159,27 @@ const logoutUser = asyncHandler(async(req, res)=>{
 
 })
 
+const refreshAccessToken = asyncHandler(async(req, res) => {
+    await generateAccessAndRefreshToken(req.user._id)
+
+    return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+        new ApiResponse(
+            201,
+            {
+                user: accessToken, refreshToken
+            },
+            "access-token refreshed"
+        )
+    )
+})
+
 export {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    refreshAccessToken
 }
