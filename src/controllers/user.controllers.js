@@ -40,6 +40,7 @@ const registerUser = asyncHandler( async (req, res) =>{
         throw new ApiError(400, "All field are required")
     }
     
+
     //check avatar and image 
     const avatarLocalStorage = req.files?.avatar[0]?.path;
     const coverImageLocalStorage = req.files?.coverImage[0]?.path;
@@ -86,10 +87,9 @@ const registerUser = asyncHandler( async (req, res) =>{
 
 const loginUser = asyncHandler( async (req, res) =>{
     // req body -> data
-    const {username, email, password} = req.body
-
+    const {username, email, password} = await req.body
     //check username or email
-    if (!username || !email) {
+    if (!(username || email)) {
         throw new ApiError(400, "usernmae or email is required")
     }
 
@@ -120,7 +120,7 @@ const loginUser = asyncHandler( async (req, res) =>{
     }
 
     return res
-    .tatus(200)
+    .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
     .json(
@@ -150,15 +150,15 @@ const logoutUser = asyncHandler(async(req, res)=>{
         }
     )
 
-    options = {
+    const options = {
         httpOnly: true,
         secure: true
     }
 
     res
     .status(201)
-    .clearCookie("accessToken")
-    .clearCookie("refreshToken")
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
     .json( new ApiResponse(200, {}, "User logout successfully"))
 
 })
